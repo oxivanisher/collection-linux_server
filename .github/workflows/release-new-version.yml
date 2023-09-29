@@ -66,6 +66,8 @@ jobs:
 
       - name: Get New Version
         id: get_new_version
+        outputs:
+
         run: |
           # Extract the new version from galaxy.yml
           NEW_VERSION=$(grep -Eo 'version: [0-9]+\.[0-9]+\.[0-9]+' galaxy.yml | cut -d ' ' -f 2)
@@ -73,7 +75,7 @@ jobs:
           echo "new_version=$NEW_VERSION" >> "$GITHUB_ENV"
 
       - name: Get Submodule Commit Messages
-        if: steps.get_new_version.outputs.new_version != ''
+        if: env.new_version != ''
         id: submodule_commit_messages
         run: |
           # Get the latest commit messages from all updated submodules
@@ -81,10 +83,10 @@ jobs:
           echo "submodule_commit_messages=$SUBMODULE_COMMIT_MESSAGES" >> "$GITHUB_ENV"
 
       - name: Create Release
-        if: steps.get_new_version.outputs.new_version != ''
+        if: env.new_version != ''
         run: |
           # Use the submodule commit messages as release notes
-          RELEASE_NOTES="Release notes for version $NEW_VERSION:\n$SUBMODULE_COMMIT_MESSAGES"
+          RELEASE_NOTES="Release notes for version $new_version:\n$SUBMODULE_COMMIT_MESSAGES"
           echo "Release notes:"
           echo "$RELEASE_NOTES"
 
@@ -93,7 +95,7 @@ jobs:
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ github.repository }}/releases \
-            -d "{\"tag_name\":\"v${{ steps.get_new_version.outputs.new_version }}\",\"name\":\"Release v${{ steps.get_new_version.outputs.new_version }}\",\"body\":\"$RELEASE_NOTES\"}")
+            -d "{\"tag_name\":\"v$new_version\",\"name\":\"Release v$new_version\",\"body\":\"$RELEASE_NOTES\"}")
 
           # Print the response for debugging
           echo "Response:"
