@@ -13,3 +13,6 @@
 [submodule "roles/html_inventory"]
 	path = roles/html_inventory
 	url = https://github.com/oxivanisher/role-html_inventory.git
+[submodule "roles/openvpn_client"]
+	path = roles/openvpn_client
+	url = https://github.com/oxivanisher/role-openvpn_client.git
