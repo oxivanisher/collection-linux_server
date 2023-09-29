@@ -4,3 +4,6 @@
 [submodule "roles/cadvisor"]
 	path = roles/cadvisor
 	url = https://github.com/oxivanisher/role-cadvisor.git
+[submodule "roles/jump_host"]
+	path = roles/jump_host
+	url = https://github.com/oxivanisher/role-jump_host.git
