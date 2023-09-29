@@ -16,3 +16,6 @@
 [submodule "roles/openvpn_client"]
 	path = roles/openvpn_client
 	url = https://github.com/oxivanisher/role-openvpn_client.git
+[submodule "roles/portainer"]
+	path = roles/portainer
+	url = https://github.com/oxivanisher/role-portainer.git
