@@ -19,3 +19,6 @@
 [submodule "roles/portainer"]
 	path = roles/portainer
 	url = https://github.com/oxivanisher/role-portainer.git
+[submodule "roles/ufw"]
+	path = roles/ufw
+	url = https://github.com/oxivanisher/role-ufw.git
