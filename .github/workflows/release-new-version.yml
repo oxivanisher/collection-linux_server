@@ -37,7 +37,7 @@ jobs:
           CURRENT_VERSION=$(grep -Eo 'version: [0-9]+\.[0-9]+\.[0-9]+' galaxy.yml | cut -d ' ' -f 2)
 
           # Get the previous version in galaxy.yml from the last commit
-          PREVIOUS_VERSION=$(git show HEAD^:galaxy.yml | grep -Eo 'version: [0-9]+\.[0-9]+\.[0-9]+' | cut -d ' ' -f 2)
+          PREVIOUS_VERSION=$(git log -1 --pretty=format:"%h" -- galaxy.yml~1)
 
           # Check if the versions are different
           if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
