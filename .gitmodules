@@ -10,3 +10,6 @@
 [submodule "roles/ansible_userspace"]
 	path = roles/ansible_userspace
 	url = https://github.com/oxivanisher/role-ansible_userspace.git
+[submodule "roles/html_inventory"]
+	path = roles/html_inventory
+	url = https://github.com/oxivanisher/role-html_inventory.git
