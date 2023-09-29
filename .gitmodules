@@ -7,3 +7,6 @@
 [submodule "roles/jump_host"]
 	path = roles/jump_host
 	url = https://github.com/oxivanisher/role-jump_host.git
+[submodule "roles/ansible_userspace"]
+	path = roles/ansible_userspace
+	url = https://github.com/oxivanisher/role-ansible_userspace.git
