@@ -1,3 +1,6 @@
 [submodule "roles/mysql"]
 	path = roles/mysql
 	url = https://github.com/oxivanisher/role-mysql.git
+[submodule "roles/cadvisor"]
+	path = roles/cadvisor
+	url = https://github.com/oxivanisher/role-cadvisor.git
