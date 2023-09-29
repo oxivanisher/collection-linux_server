@@ -69,6 +69,7 @@ jobs:
         run: |
           # Extract the new version from galaxy.yml
           NEW_VERSION=$(grep -Eo 'version: [0-9]+\.[0-9]+\.[0-9]+' galaxy.yml | cut -d ' ' -f 2)
+          echo "New version: $NEW_VERSION"
           echo "new_version=$NEW_VERSION" >> "$GITHUB_ENV"
 
       - name: Get Submodule Commit Messages
