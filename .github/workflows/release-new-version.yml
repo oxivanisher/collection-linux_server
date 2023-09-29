@@ -66,8 +66,6 @@ jobs:
 
       - name: Get New Version
         id: get_new_version
-        outputs:
-
         run: |
           # Extract the new version from galaxy.yml
           NEW_VERSION=$(grep -Eo 'version: [0-9]+\.[0-9]+\.[0-9]+' galaxy.yml | cut -d ' ' -f 2)
