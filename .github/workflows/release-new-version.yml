@@ -109,12 +109,12 @@ jobs:
     steps:
       - name: Checkout Repository (again)
         uses: actions/checkout@v4
-        if: ${{ needs.create_release.outputs.release_created == 'success' }}
+        if: needs.create_release.outputs.release_created == 'success'
         with:
           submodules: true
 
       - name: Build Collection
-        if: ${{ needs.create_release.outputs.release_created == 'success' }}
+        if: needs.create_release.outputs.release_created == 'success'
         run: |
           ansible-galaxy collection build .
         working-directory: ${{ github.workspace }}
