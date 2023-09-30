@@ -43,7 +43,7 @@ jobs:
         id: version_change
         run: |
           # Get the current version in galaxy.yml
-          CURRENT_VERSION=$(grep -Eo 'version: [0-9]+\.[0-9]+\.[0-9]+' galaxy.yml | cut-d ' ' -f 2)
+          CURRENT_VERSION=$(grep -Eo 'version: [0-9]+\.[0-9]+\.[0-9]+' galaxy.yml | cut -d ' ' -f 2)
 
           # Get the previous version in galaxy.yml from the last commit
           PREVIOUS_VERSION=$(git log -1 --pretty=format:"%h" -- galaxy.yml~1)
