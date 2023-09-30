@@ -22,7 +22,6 @@ jobs:
       - name: Update Submodules
         run: |
           git submodule update --init --recursive
-        # Update submodules after initial checkout
 
       - name: Check for Submodule Changes
         id: submodule_changes
@@ -77,15 +76,16 @@ jobs:
           echo "new_version=$NEW_VERSION" >> "$GITHUB_ENV"
 
       - name: Get Submodule Commit Messages
-        if: env.new_version != '' && steps.submodule_changes.outcome == 'success'
+        if: env.new_version != ''
         id: submodule_commit_messages
         run: |
           # Get the latest commit messages from all updated submodules
           SUBMODULE_COMMIT_MESSAGES=$(git submodule foreach --quiet 'git log -1 --pretty=format:"%s"')
           echo "submodule_commit_messages=$SUBMODULE_COMMIT_MESSAGES" >> "$GITHUB_ENV"
 
-      - name: Create Release
-        if: env.new_version != '' && steps.submodule_changes.outcome == 'success'
+      - name: Create Release on Github
+        id: release_created
+        if: env.new_version != ''
         run: |
           # Use the submodule commit messages as release notes
           RELEASE_NOTES="Release notes for version $new_version:\n$SUBMODULE_COMMIT_MESSAGES"
