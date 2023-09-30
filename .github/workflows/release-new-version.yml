@@ -24,15 +24,6 @@ jobs:
           git submodule update --init --recursive
         # Update submodules after initial checkout
 
-      - name: Commit Updated Submodules
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add .
-          git commit -m "Update submodules"
-          git push
-        # Commit the submodule changes and push them to the repository
-
       - name: Check for Submodule Changes
         id: submodule_changes
         run: |
@@ -41,7 +32,12 @@ jobs:
             echo "No submodule changes detected."
             exit 0
           fi
-          echo "Submodule changes detected."
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update submodules from workflow"
+          git push
+          echo "Submodule changes detected and pushed to repository."
         continue-on-error: true
 
       - name: Check for Version Change
@@ -81,7 +77,7 @@ jobs:
           echo "new_version=$NEW_VERSION" >> "$GITHUB_ENV"
 
       - name: Get Submodule Commit Messages
-        if: env.new_version != ''
+        if: env.new_version != '' && steps.submodule_changes.outcome == 'success'
         id: submodule_commit_messages
         run: |
           # Get the latest commit messages from all updated submodules
@@ -89,7 +85,7 @@ jobs:
           echo "submodule_commit_messages=$SUBMODULE_COMMIT_MESSAGES" >> "$GITHUB_ENV"
 
       - name: Create Release
-        if: env.new_version != ''
+        if: env.new_version != '' && steps.submodule_changes.outcome == 'success'
         run: |
           # Use the submodule commit messages as release notes
           RELEASE_NOTES="Release notes for version $new_version:\n$SUBMODULE_COMMIT_MESSAGES"
