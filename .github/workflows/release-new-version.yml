@@ -1,100 +1,77 @@
-name: Auto Release on Version Change with Commit Messages
+name: Auto Release and Publish to Ansible Galaxy
 
 on:
   push:
-    branches:
-      - main  # Replace with your main branch name
-  workflow_run:
-    workflows: ["Check for Version Change"]
-    types:
-      - completed
+    tags:
+      - '*'
 
 jobs:
-  check_version:
+  release_and_publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          submodules: true
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: true
 
-      - name: Check for Submodule Changes
-        id: submodule_changes
-        run: |
-          # Check if there are changes in submodules
-          if git diff --quiet --exit-code && git diff --quiet --exit-code --cached; then
-            echo "No submodule changes detected."
-            exit 0
-          fi
-          echo "Submodule changes detected."
-        continue-on-error: true
+    - name: Update Submodules
+      run: |
+        git submodule update --init --recursive
+      # Update submodules after initial checkout
 
-      - name: Check for Version Change
-        id: version_change
-        run: |
-          # Get the current version in galaxy.yml
-          CURRENT_VERSION=$(grep -Eo 'version: [0-9]+\.[0-9]+\.[0-9]+' galaxy.yml | cut -d ' ' -f 2)
+    - name: Commit Updated Submodules
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Update submodules"
+        git push
+      # Commit the submodule changes and push them to the repository
 
-          # Get the previous version in galaxy.yml from the last commit
-          PREVIOUS_VERSION=$(git log -1 --pretty=format:"%h" -- galaxy.yml~1)
+    - name: Check for Submodule Changes
+      id: submodule_changes
+      run: |
+        # Check if there are changes in submodules
+        if git diff --quiet --exit-code && git diff --quiet --exit-code --cached; then
+          echo "No submodule changes detected."
+          exit 0
+        fi
+        echo "Submodule changes detected."
+      continue-on-error: true
 
-          # Check if the versions are different
-          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
-            echo "Version change detected."
-          else
-            echo "No version change detected."
-            exit 0
-          fi
-        continue-on-error: true
+    - name: Check for Version Change
+      id: version_change
+      run: |
+        # Get the current version in galaxy.yml
+        CURRENT_VERSION=$(grep -Eo 'version: [0-9]+\.[0-9]+\.[0-9]+' galaxy.yml | cut -d ' ' -f 2)
 
-      - name: Trigger Submodule Update
-        if: steps.version_change.outcome == 'success'
-        run: |
-          # Trigger a submodule update to include the latest changes
-          git submodule update --recursive --remote
+        # Get the previous version in galaxy.yml from the last commit
+        PREVIOUS_VERSION=$(git log -1 --pretty=format:"%h" -- galaxy.yml~1)
 
-  create_release:
-    needs: [check_version]
-    runs-on: ubuntu-latest
+        # Check if the versions are different
+        if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+          echo "Version change detected."
+        else
+          echo "No version change detected."
+          exit 0
+        fi
+      continue-on-error: true
 
-    steps:
-      - name: Checkout Repository (again)
-        uses: actions/checkout@v4
-        with:
-          submodules: true
+    - name: Trigger Submodule Update
+      if: steps.version_change.outcome == 'success'
+      run: |
+        # Trigger a submodule update to include the latest changes
+        git submodule update --recursive --remote
 
-      - name: Get New Version
-        id: get_new_version
-        run: |
-          # Extract the new version from galaxy.yml
-          NEW_VERSION=$(grep -Eo 'version: [0-9]+\.[0-9]+\.[0-9]+' galaxy.yml | cut -d ' ' -f 2)
-          echo "New version: $NEW_VERSION"
-          echo "new_version=$NEW_VERSION" >> "$GITHUB_ENV"
+    - name: Build Collection
+      run: |
+        ansible-galaxy collection build .
+      working-directory: ${{ github.workspace }}
 
-      - name: Get Submodule Commit Messages
-        if: env.new_version != ''
-        id: submodule_commit_messages
-        run: |
-          # Get the latest commit messages from all updated submodules
-          SUBMODULE_COMMIT_MESSAGES=$(git submodule foreach --quiet 'git log -1 --pretty=format:"%s"')
-          echo "submodule_commit_messages=$SUBMODULE_COMMIT_MESSAGES" >> "$GITHUB_ENV"
-
-      - name: Create Release
-        if: env.new_version != ''
-        run: |
-          # Use the submodule commit messages as release notes
-          RELEASE_NOTES="Release notes for version $new_version:\n$SUBMODULE_COMMIT_MESSAGES"
-          echo "Release notes:"
-          echo "$RELEASE_NOTES"
-
-          # Create a new release using the GitHub API
-          RESPONSE=$(curl -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/releases \
-            -d "{\"tag_name\":\"v$new_version\",\"name\":\"Release v$new_version\",\"body\":\"$RELEASE_NOTES\"}")
-
-          # Print the response for debugging
-          echo "Response:"
-          echo "$RESPONSE"
+    - name: Publish Collection to Ansible Galaxy
+      env:
+        ANSIBLE_GALAXY_API_TOKEN: ${{ secrets.ANSIBLE_GALAXY_API_TOKEN }}
+      run: |
+        ansible-galaxy collection publish --token $ANSIBLE_GALAXY_API_TOKEN *.tar.gz
+      working-directory: ${{ github.workspace }}
