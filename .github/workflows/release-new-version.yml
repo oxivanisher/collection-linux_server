@@ -105,18 +105,18 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        if: job.create_release.outputs.release_created == 'success'
+        if:  ${{ needs.create_release.outputs.release_created == 'success' }}
         with:
           submodules: true
 
       - name: Build Collection
-        if: job.create_release.outputs.release_created == 'success'
+        if:  ${{ needs.create_release.outputs.release_created == 'success' }}
         run: |
           ansible-galaxy collection build .
         working-directory: ${{ github.workspace }}
 
       - name: Publish Collection to Ansible Galaxy
-        if: job.create_release.outputs.release_created == 'success'
+        if:  ${{ needs.create_release.outputs.release_created == 'success' }}
         env:
           ANSIBLE_GALAXY_API_TOKEN: ${{ secrets.ANSIBLE_GALAXY_API_TOKEN }}
         run: |
