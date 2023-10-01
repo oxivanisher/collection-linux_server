@@ -59,6 +59,9 @@ jobs:
 
   create_release:
     runs-on: ubuntu-latest
+    outputs:
+      my_output: ${{ steps.get_new_version.outputs.new_version }}
+    needs: check_version
 
     steps:
       - name: Checkout Repository
@@ -73,6 +76,7 @@ jobs:
           NEW_VERSION=$(grep -Eo 'version: [0-9]+\.[0-9]+\.[0-9]+' galaxy.yml | cut -d ' ' -f 2)
           echo "New version: $NEW_VERSION"
           echo "new_version=$NEW_VERSION" >> "$GITHUB_ENV"
+          echo "new_version=$NEW_VERSION" >> "$new_version"
 
       - name: Get Submodule Commit Messages
         if: env.new_version != ''
@@ -99,25 +103,14 @@ jobs:
             -d "{\"tag_name\":\"v$new_version\",\"name\":\"Release v$new_version\",\"body\":\"$RELEASE_NOTES\"}")
           exit 0
 
-  build_and_upload:
-    needs: [create_release]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        if:  ${{ needs.create_release.outputs.release_created == 'success' }}
-        with:
-          submodules: true
-
-      - name: Build Collection
-        if:  ${{ needs.create_release.outputs.release_created == 'success' }}
+      - name: Build ansible galaxy collection
+        if: env.new_version != ''
         run: |
           ansible-galaxy collection build .
         working-directory: ${{ github.workspace }}
 
-      - name: Publish Collection to Ansible Galaxy
-        if:  ${{ needs.create_release.outputs.release_created == 'success' }}
+      - name: Publish collection to Ansible Galaxy
+        if: env.new_version != ''
         env:
           ANSIBLE_GALAXY_API_TOKEN: ${{ secrets.ANSIBLE_GALAXY_API_TOKEN }}
         run: |
