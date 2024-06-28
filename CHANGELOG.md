@@ -1,3 +1,7 @@
+## 2024-06-28
+* Adding supported minimal version for linter
+* Improve readme
+
 ## 2024-05-01
 * UFW role: Add Readme and rework only open SSH for ansible port from management and not public
 
