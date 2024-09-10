@@ -1,3 +1,6 @@
+## 2024-09-10
+* Bump for portainer role supporting docker compose v2
+
 ## 2024-06-28
 * Adding supported minimal version for linter
 * Improve readme
