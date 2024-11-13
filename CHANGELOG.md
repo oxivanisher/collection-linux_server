@@ -1,3 +1,6 @@
+## 2024-11-13
+* Bump for ansible userspace for tab autocomplete
+
 ## 2024-09-10
 * Bump for portainer role supporting docker compose v2
 
