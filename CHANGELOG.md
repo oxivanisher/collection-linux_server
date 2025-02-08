@@ -1,5 +1,6 @@
 ## 2025-02-08
 * Bump for all roles to remove unused tests directory to make linter happy
+* Everything is now correctly linted
 
 ## 2024-11-13
 * Bump for ansible userspace for tab autocomplete
