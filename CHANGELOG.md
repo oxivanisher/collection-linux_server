@@ -1,3 +1,6 @@
+## 2025-03-13
+* Bump for portainer role, adding Portainer SSL Port
+
 ## 2025-03-01
 * Bump for openvpn_client removing compression. This will break your connections!
 
