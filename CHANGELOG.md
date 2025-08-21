@@ -1,3 +1,6 @@
+## 2025-08-21
+* Bump for ansible_userspace role (adding ansible-navigator)
+
 ## 2025-03-13
 * Bump for portainer role, adding Portainer SSL Port
 
