@@ -1,3 +1,6 @@
+## 2025-09-30
+* Bump for jump user role idempotency improvement
+
 ## 2025-08-21
 * Bump for ansible_userspace role (adding ansible-navigator)
 
