@@ -1,3 +1,6 @@
+## 2025-10-04
+* Ensure switch variable is bool
+
 ## 2025-09-30
 * Bump for jump user role idempotency improvement
 
