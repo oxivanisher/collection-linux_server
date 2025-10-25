@@ -1,3 +1,6 @@
+## 2025-10-25
+* Bump for ufw role supporting check mode
+
 ## 2025-10.05
 * Lookup user homes instead of guesstimating
 * Install trixie ansible dep for pip
