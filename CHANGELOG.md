@@ -1,6 +1,7 @@
 ## 2025-10-25
 * Bump for ufw role supporting check mode
 * Bump for openvpn role supporting check mode
+* Bump for portainer role to use docker-compose plugin package for v2 and support check mode
 
 ## 2025-10.05
 * Lookup user homes instead of guesstimating
