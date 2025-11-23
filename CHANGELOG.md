@@ -1,3 +1,6 @@
+## 2025-11-23
+* Ansible 2.5 porting in all roles
+
 ## 2025-10-25
 * Bump for ufw role supporting check mode
 * Bump for openvpn role supporting check mode
