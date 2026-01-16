@@ -1,3 +1,6 @@
+## 2026-01-16
+* Bump for ansible_userspace check mode
+
 ## 2025-11-23
 * Ansible 2.5 porting in all roles
 
