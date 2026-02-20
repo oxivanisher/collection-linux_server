@@ -1,5 +1,5 @@
 ## 2026-02-20
-* Bump for ufw role. Migrate ufw_mgmt_my_iprange to be a list.
+* Bump for ufw role. Migrate ufw_mgmt_src_iprange to be a list.
 
 ## 2026-01-16
 * Bump for ansible_userspace yaml syntax
