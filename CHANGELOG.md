@@ -1,3 +1,6 @@
+## 2026-02-26
+* Bump for portainer role to not fill the syslog
+
 ## 2026-02-20
 * Bump for ufw role. Migrate ufw_mgmt_src_iprange to be a list.
 
