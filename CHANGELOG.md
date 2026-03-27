@@ -1,3 +1,6 @@
+## 2026-03-27
+* Bump for portainer to support custom CA to trust
+
 ## 2026-02-26
 * Bump for portainer role to not fill the syslog
 
