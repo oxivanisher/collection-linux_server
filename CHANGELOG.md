@@ -1,3 +1,6 @@
+## 2026-04-01 (2)
+* Remove redundant become_user: root in all roles
+
 ## 2026-04-01
 * openvpn_client: fix config file permissions to 0600, use systemd_service module
 * mysql: fix backup script permissions to 0700
