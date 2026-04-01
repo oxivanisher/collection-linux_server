@@ -1,3 +1,8 @@
+## 2026-04-01
+* openvpn_client: fix config file permissions to 0600, use systemd_service module
+* mysql: fix backup script permissions to 0700
+* ansible_userspace: use systemd_service module instead of generic service module
+
 ## 2026-03-27
 * Bump for portainer to support custom CA to trust
 
