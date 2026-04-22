@@ -8,7 +8,7 @@ namespace: oxivanisher
 name: linux_server
 
 # The version of the collection. Must be compatible with semantic versioning
-version: 1.2.7
+version: 1.2.8
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
@@ -62,6 +62,7 @@ issues: https://github.com/oxivanisher/collection-linux_server/issues
 # uses 'fnmatch' to match the files or directories. Some directories and files like 'galaxy.yml', '*.pyc', '*.retry',
 # and '.git' are always filtered. Mutually exclusive with 'manifest'
 build_ignore: []
+
 # A dict controlling use of manifest directives used in building the collection artifact. The key 'directives' is a
 # list of MANIFEST.in style
 # L(directives,https://packaging.python.org/en/latest/guides/using-manifest-in/#manifest-in-commands). The key
