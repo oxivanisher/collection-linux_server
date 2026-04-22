@@ -1,3 +1,6 @@
+## 2026-04-22
+* Bump for portainer to improved docker-prune service
+
 ## 2026-04-01 (2)
 * Remove redundant become_user: root in all roles
 
